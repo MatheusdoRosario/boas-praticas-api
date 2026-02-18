@@ -1,5 +1,8 @@
 package br.com.alura.adopet.api.service;
 
+import br.com.alura.adopet.api.dto.AprovacaoAdocaoDto;
+import br.com.alura.adopet.api.dto.ReprovacaoAdocaoDto;
+import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDto;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Adocao;
 import br.com.alura.adopet.api.model.StatusAdocao;
@@ -20,7 +23,7 @@ public class AdocaoService {
     @Autowired
     private EmailService emailService;
 
-    public void solicitar(Adocao adocao) {
+    public void solicitar(SolicitacaoAdocaoDto dto) {
         if (adocao.getPet().getAdotado()) {
             throw new ValidacaoException("Pet já foi adotado!");
         } else {
@@ -55,7 +58,7 @@ public class AdocaoService {
                 ("Olá " +adocao.getPet().getAbrigo().getNome() +"!\n\nUma solicitação de adoção foi registrada hoje para o pet: " +adocao.getPet().getNome() +". \nFavor avaliar para aprovação ou reprovação."));
     }
 
-    public void aprovar(Adocao adocao){
+    public void aprovar(AprovacaoAdocaoDto adocao){
         adocao.setStatus(StatusAdocao.APROVADO);
         repository.save(adocao);
 
@@ -66,7 +69,7 @@ public class AdocaoService {
 
     }
 
-    public void reprovar(Adocao adocao) {
+    public void reprovar(ReprovacaoAdocaoDto adocao) {
         adocao.setStatus(StatusAdocao.REPROVADO);
         repository.save(adocao);
 
