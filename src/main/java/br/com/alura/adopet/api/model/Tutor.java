@@ -1,11 +1,8 @@
 package br.com.alura.adopet.api.model;
 
 import br.com.alura.adopet.api.dto.AtualizarTutorDto;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import br.com.alura.adopet.api.dto.CadastrarTutorDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,23 +17,26 @@ public class Tutor {
 
     private String nome;
 
-    @Pattern(regexp = "\\(?\\d{2}\\)?\\d?\\d{4}-?\\d{4}")
     private String telefone;
 
-    @Email
     private String email;
 
     @OneToMany(mappedBy = "tutor")
-    @JsonManagedReference("tutor_adocoes")
     private List<Adocao> adocoes;
 
     public Tutor() {
     }
 
-    public Tutor(String nome, String telefone, String email) {
-        this.nome = nome;
-        this.telefone = telefone;
-        this.email = email;
+    public Tutor(CadastrarTutorDto dto) {
+        this.nome = dto.nome();
+        this.telefone = dto.telefone();
+        this.email = dto.email();
+    }
+
+    public void atualizarDados(AtualizarTutorDto dto) {
+        this.nome = dto.nome();
+        this.telefone = dto.telefone();
+        this.email = dto.email();
     }
 
     @Override
@@ -74,18 +74,6 @@ public class Tutor {
 
     public void setAdocoes(List<Adocao> adocoes) {
         this.adocoes = adocoes;
-    }
-
-    public void atualizarTutor(AtualizarTutorDto dto) {
-        if (dto.nome() != null) {
-            this.nome = dto.nome();
-        }
-        if (dto.telefone() != null) {
-            this.telefone = dto.telefone();
-        }
-        if (dto.email() != null) {
-            this.email = dto.email();
-        }
     }
 
 
