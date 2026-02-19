@@ -1,8 +1,25 @@
 package br.com.alura.adopet.api.repository;
 
 import br.com.alura.adopet.api.model.Adocao;
+import br.com.alura.adopet.api.model.StatusAdocao;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface AdocaoRepository extends JpaRepository<Adocao, Long> {
 
+    boolean existsByPetIdAndStatus(Long id, StatusAdocao status);
+
+    boolean existsByTutorIdAndStatus(Long id, StatusAdocao status);
+
+    @Query("SELECT CASE WHEN COUNT(a) >= 5 THEN TRUE ELSE FALSE END " +
+            "FROM Adocao a " +
+            "WHERE a.tutorId = :tutorId AND a.status = :status")
+    boolean existsTutorComCincoOuMaisAdocoes(@Param("tutorId") Long tutorId,
+                                              @Param("status") StatusAdocao status);
+
+
 }
+
+
+
