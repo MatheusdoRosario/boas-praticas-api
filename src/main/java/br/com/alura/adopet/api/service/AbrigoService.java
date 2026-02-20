@@ -8,10 +8,12 @@ import br.com.alura.adopet.api.model.Abrigo;
 import br.com.alura.adopet.api.repository.AbrigoRepository;
 import br.com.alura.adopet.api.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class AbrigoService {
 
     @Autowired
@@ -29,7 +31,7 @@ public class AbrigoService {
     }
 
     public void cadastrar(CadastrarAbrigoDto dto) {
-        boolean jaCadastrado = abrigoRepository.existsByNameOrTelefoneOrEmail(dto.nome(), dto.telefone(), dto.email());
+        boolean jaCadastrado = abrigoRepository.existsByNomeOrTelefoneOrEmail(dto.nome(), dto.telefone(), dto.email());
 
         if (jaCadastrado){
             throw new ValidacaoException("Dados já cadastrados para outro abrigo!");

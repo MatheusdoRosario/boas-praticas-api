@@ -12,9 +12,9 @@ public interface AdocaoRepository extends JpaRepository<Adocao, Long> {
 
     boolean existsByTutorIdAndStatus(Long id, StatusAdocao status);
 
-    @Query("SELECT CASE WHEN COUNT(a) >= 5 THEN TRUE ELSE FALSE END " +
+    @Query(value = "SELECT CASE WHEN COUNT(a) >= 5 THEN TRUE ELSE FALSE END " +
             "FROM Adocao a " +
-            "WHERE a.tutorId = :tutorId AND a.status = :status")
+            "WHERE a.tutorId = :tutorId AND a.status = :status", nativeQuery = true)
     boolean existsTutorComCincoOuMaisAdocoes(@Param("tutorId") Long tutorId,
                                               @Param("status") StatusAdocao status);
 
