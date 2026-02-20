@@ -1,7 +1,7 @@
 package br.com.alura.adopet.api.service;
 
 import br.com.alura.adopet.api.dto.AbrigoDto;
-import br.com.alura.adopet.api.dto.CadastrarAbrigoDto;
+import br.com.alura.adopet.api.dto.CadastroAbrigoDto;
 import br.com.alura.adopet.api.dto.PetDto;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Abrigo;
@@ -30,17 +30,17 @@ public class AbrigoService {
                 .toList();
     }
 
-    public void cadastrar(CadastrarAbrigoDto dto) {
+    public void cadatrar(CadastroAbrigoDto dto) {
         boolean jaCadastrado = abrigoRepository.existsByNomeOrTelefoneOrEmail(dto.nome(), dto.telefone(), dto.email());
 
-        if (jaCadastrado){
+        if (jaCadastrado) {
             throw new ValidacaoException("Dados já cadastrados para outro abrigo!");
         }
 
         abrigoRepository.save(new Abrigo(dto));
     }
 
-    public List<PetDto> listarPets(String idOuNome) {
+    public List<PetDto> listarPetsDoAbrigo(String idOuNome) {
         Abrigo abrigo = carregarAbrigo(idOuNome);
 
         return petRepository
@@ -51,14 +51,15 @@ public class AbrigoService {
     }
 
     public Abrigo carregarAbrigo(String idOuNome) {
-        Optional<Abrigo> optionalAbrigo;
+        Optional<Abrigo> optional;
         try {
             Long id = Long.parseLong(idOuNome);
-            optionalAbrigo = abrigoRepository.findById(id);
-        } catch (NumberFormatException e) {
-            optionalAbrigo = Optional.ofNullable(abrigoRepository.findByNome(idOuNome));
+            optional = abrigoRepository.findById(id);
+        } catch (NumberFormatException exception) {
+            optional = abrigoRepository.findByNome(idOuNome);
         }
 
-        return optionalAbrigo.orElseThrow(() -> new ValidacaoException("Abrigo não encontrado!"));
+        return optional.orElseThrow(() -> new ValidacaoException("Abrigo não encontrado"));
     }
+
 }

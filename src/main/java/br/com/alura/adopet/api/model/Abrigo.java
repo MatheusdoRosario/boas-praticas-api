@@ -1,9 +1,8 @@
 package br.com.alura.adopet.api.model;
 
-import br.com.alura.adopet.api.dto.CadastrarAbrigoDto;
+import br.com.alura.adopet.api.dto.CadastroAbrigoDto;
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,13 +19,10 @@ public class Abrigo {
 
     private String email;
 
-    @OneToMany(mappedBy = "abrigo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Pet> pets;
-
     public Abrigo() {
     }
 
-    public Abrigo(CadastrarAbrigoDto dto) {
+    public Abrigo(CadastroAbrigoDto dto) {
         this.nome = dto.nome();
         this.telefone = dto.telefone();
         this.email = dto.email();
@@ -61,11 +57,4 @@ public class Abrigo {
         return email;
     }
 
-    public List<Pet> getPets() {
-        return pets;
-    }
-
-    public void setPets(List<Pet> pets) {
-        this.pets = pets;
-    }
 }
