@@ -1,7 +1,7 @@
 package br.com.alura.adopet.api.controller;
 
-import br.com.alura.adopet.api.dto.AtualizarTutorDto;
-import br.com.alura.adopet.api.dto.CadastrarTutorDto;
+import br.com.alura.adopet.api.dto.AtualizacaoTutorDto;
+import br.com.alura.adopet.api.dto.CadastroTutorDto;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.service.TutorService;
 import jakarta.validation.Valid;
@@ -19,23 +19,23 @@ public class TutorController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> cadastrar(@RequestBody @Valid CadastrarTutorDto dto) {
+    public ResponseEntity<String> cadastrar(@RequestBody @Valid CadastroTutorDto dto) {
         try {
             service.cadastrar(dto);
             return ResponseEntity.ok().build();
-        } catch (ValidacaoException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (ValidacaoException exception) {
+            return ResponseEntity.badRequest().body(exception.getMessage());
         }
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity<String> atualizar(@RequestBody @Valid AtualizarTutorDto dto) {
+    public ResponseEntity<String> atualizar(@RequestBody @Valid AtualizacaoTutorDto dto) {
         try {
             service.atualizar(dto);
             return ResponseEntity.ok().build();
-        } catch (ValidacaoException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (ValidacaoException exception) {
+            return ResponseEntity.badRequest().body(exception.getMessage());
         }
     }
 
