@@ -23,15 +23,11 @@ class ValidacaoPetComAdocaoEmAndamentoTest {
     private SolicitacaoAdocaoDto dto;
 
     @Mock
-    private Adocao adocao;
-
-    @Mock
     private AdocaoRepository repository;
 
     @Test
     void deveriaPermitirValidacaoPetComAdocaoEmAndamento() {
 
-        BDDMockito.given(dto.idPet()).willReturn(1L);
         BDDMockito.given(repository.existsByPetIdAndStatus(dto.idPet(), StatusAdocao.AGUARDANDO_AVALIACAO)).willReturn(false);
 
         Assertions.assertDoesNotThrow(() -> validacao.validar(dto));
@@ -41,7 +37,6 @@ class ValidacaoPetComAdocaoEmAndamentoTest {
     @Test
     void naoDeveriaPermitirValidacaoPetComAdocaoEmAndamento() {
 
-        BDDMockito.given(dto.idPet()).willReturn(1L);
         BDDMockito.given(repository.existsByPetIdAndStatus(dto.idPet(), StatusAdocao.AGUARDANDO_AVALIACAO)).willReturn(true);
 
         Assertions.assertThrows(ValidacaoException.class, () -> validacao.validar(dto));
