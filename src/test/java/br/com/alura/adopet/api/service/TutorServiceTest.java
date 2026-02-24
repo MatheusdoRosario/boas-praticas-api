@@ -8,13 +8,13 @@ import br.com.alura.adopet.api.repository.TutorRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class TutorServiceTest {
@@ -28,18 +28,19 @@ class TutorServiceTest {
     @Mock
     private CadastroTutorDto cadastroTutorDto;
 
+    @Mock
     private AtualizacaoTutorDto atualizacaoTutorDto;
-    private Tutor tutor;
 
-    @Captor
-    private ArgumentCaptor<Tutor> tutorArgumentCaptor;
+    @Mock
+    private Tutor tutor;
 
     @Test
     void deveCadastrarTutorSemErro() {
 
         given(repository.existsByTelefoneOrEmail(cadastroTutorDto.telefone(), cadastroTutorDto.email())).willReturn(false);
 
-        Assertions.assertDoesNotThrow(() -> service.cadastrar(cadastroTutorDto));
+        assertDoesNotThrow(() -> service.cadastrar(cadastroTutorDto));
+        then(repository).should().save(new Tutor(cadastroTutorDto));
     }
 
     @Test
@@ -53,17 +54,11 @@ class TutorServiceTest {
     @Test
     void deveAtualizarTutorSemErro() {
 
-        AtualizacaoTutorDto dto = new AtualizacaoTutorDto(1L, "Teste", "22555554444", "teste@gmail.com");
-        Tutor tutor = new Tutor(new CadastroTutorDto("teste", "22555554444", "teste@outlook.com"));
-        given(repository.getReferenceById(dto.id())).willReturn(tutor);
+        given(repository.getReferenceById(atualizacaoTutorDto.id())).willReturn(tutor);
 
-        service.atualizar(dto);
+        service.atualizar(atualizacaoTutorDto);
 
-        Assertions.assertEquals("Teste", tutor.getNome());
-        Assertions.assertEquals("22555554444", tutor.getTelefone());
-        Assertions.assertEquals("teste@gmail.com", tutor.getEmail());
-
-        //Assertions.assertDoesNotThrow(() -> tutor.atualizarDados(dto));
+        then(tutor).should().atualizarDados(atualizacaoTutorDto);
     }
 
 

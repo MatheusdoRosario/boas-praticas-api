@@ -4,6 +4,7 @@ import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDto;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.StatusAdocao;
 import br.com.alura.adopet.api.repository.AdocaoRepository;
+import br.com.alura.adopet.api.repository.TutorRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,9 @@ class ValidacaoTutorComAdocaoEmAndamentoTest {
 
     @Mock
     private AdocaoRepository adocaoRepository;
+
+    @Mock
+    private TutorRepository tutorRepository;
 
     @Mock
     private SolicitacaoAdocaoDto dto;

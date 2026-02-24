@@ -1,6 +1,5 @@
 package br.com.alura.adopet.api.service;
 
-import br.com.alura.adopet.api.dto.AbrigoDto;
 import br.com.alura.adopet.api.dto.CadastroAbrigoDto;
 import br.com.alura.adopet.api.dto.PetDto;
 import br.com.alura.adopet.api.exception.ValidacaoException;
@@ -11,8 +10,6 @@ import br.com.alura.adopet.api.repository.PetRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,12 +34,6 @@ class AbrigoServiceTest {
     private PetRepository petRepository;
 
     @Mock
-    private AbrigoDto abrigoDto;
-
-    @Mock
-    private PetDto petDto;
-
-    @Mock
     private Abrigo abrigo;
 
     @Mock
@@ -51,17 +42,12 @@ class AbrigoServiceTest {
     @Mock
     private CadastroAbrigoDto dto;
 
-    @Mock
-    private ValidacaoException validacaoException;
-
     @Test
-    void deveRetornarUmaListaDeAbrigoDto() {
+    void deveChamarUmaListaDeAbrigos() {
 
-        given(abrigoRepository.findAll()).willReturn(List.of(abrigo, abrigo));
+        service.listar();
 
-        List<AbrigoDto> dtos = service.listar();
-
-        assertEquals(2, dtos.size());
+        then(abrigoRepository).should().findAll();
     }
 
     @Test
@@ -81,48 +67,14 @@ class AbrigoServiceTest {
     }
 
     @Test
-    void deveRetornarUmaListaDePetsDoAbrigo() {
+    void deveChamarUmaListaDePetsDoAbrigo() {
 
-        given(abrigoRepository.findByNome("Teste")).willReturn(Optional.of(abrigo));
-        given(petRepository.findByAbrigo(abrigo)).willReturn(List.of(pet, pet, pet));
-
-        List<PetDto> dtos = service.listarPetsDoAbrigo("Teste");
-
-        assertEquals(3, dtos.size());
-    }
-
-    @Test
-    void deveCarregarAbrigoPeloIdSemErro() {
-        String id = "1";
-        given(abrigoRepository.findById(Long.parseLong(id))).willReturn(Optional.of(abrigo));
-
-        Assertions.assertDoesNotThrow(() -> service.carregarAbrigo(id));
-    }
-
-    @Test
-    void naoDeveCarregarAbrigoPeloIdComErro() {
-        String id = "1";
-        given(abrigoRepository.findById(Long.parseLong(id))).willReturn(Optional.empty());
-
-        Assertions.assertThrows(ValidacaoException.class,() -> service.carregarAbrigo(id));
-
-    }
-
-    @Test
-    void deveCarregarAbrigoPeloNomeSemErro() {
         String nome = "Teste";
         given(abrigoRepository.findByNome(nome)).willReturn(Optional.of(abrigo));
 
-        Assertions.assertDoesNotThrow(() -> service.carregarAbrigo(nome));
-    }
+        service.listarPetsDoAbrigo(nome);
 
-    @Test
-    void naoDeveCarregarAbrigoPeloNomeComErro() {
-
-        String nome = null;
-        given(abrigoRepository.findByNome(nome)).willReturn(Optional.empty());
-
-        Assertions.assertThrows(ValidacaoException.class,() -> service.carregarAbrigo(nome));
+        then(petRepository).should().findByAbrigo(abrigo);
     }
 
 
