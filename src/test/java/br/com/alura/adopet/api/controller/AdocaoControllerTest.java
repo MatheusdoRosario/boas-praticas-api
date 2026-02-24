@@ -1,5 +1,7 @@
 package br.com.alura.adopet.api.controller;
 
+import br.com.alura.adopet.api.dto.AprovacaoAdocaoDto;
+import br.com.alura.adopet.api.dto.ReprovacaoAdocaoDto;
 import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDto;
 import br.com.alura.adopet.api.service.AdocaoService;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,6 +31,12 @@ class AdocaoControllerTest {
 
     @Autowired
     private JacksonTester<SolicitacaoAdocaoDto> jsonDto;
+
+    @Autowired
+    private JacksonTester<AprovacaoAdocaoDto> jsonAprovacaoDto;
+
+    @Autowired
+    private JacksonTester<ReprovacaoAdocaoDto> jsonReprovacaoDto;
 
     @Test
     void deveriaDevolverCodigo400ParaSolicitacaoDeAdocaoComErros() throws Exception {
@@ -51,6 +60,35 @@ class AdocaoControllerTest {
         var response = mvc.perform(
                 post("/adocoes")
                         .content(jsonDto.write(dto).getJson())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    void deveriaRetornarCodigo200ParaAprovarAdocaoSemErros() throws Exception {
+
+        AprovacaoAdocaoDto aprovacaoAdocaoDto = new AprovacaoAdocaoDto(1l);
+
+        var response = mvc.perform(
+                put("/adocoes/aprovar")
+                        .content(jsonAprovacaoDto.write(aprovacaoAdocaoDto).getJson())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+    }
+
+
+    @Test
+    void deveriaRetornarCodigo200ParaReprovarAdocaoSemErros() throws Exception {
+
+        ReprovacaoAdocaoDto reprovacaoAdocaoDto = new ReprovacaoAdocaoDto(1l, "Motivo qualquer");
+
+        var response = mvc.perform(
+                put("/adocoes/reprovar")
+                        .content(jsonReprovacaoDto.write(reprovacaoAdocaoDto).getJson())
                         .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
 
