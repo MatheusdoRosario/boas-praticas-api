@@ -39,7 +39,6 @@ class PetServiceTest {
     @Mock
     private Abrigo abrigo;
 
-    @Mock
     private CadastroPetDto cadastroPetDto;
 
     @Captor
